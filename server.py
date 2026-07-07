@@ -27,7 +27,7 @@ DOUBAO_ENDPOINT = os.environ.get(
     "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
 )
 DOUBAO_MODEL = os.environ.get("DOUBAO_MODEL", "doubao-seed-2.0-pro")
-MAX_IMAGE_SIZE = 20 * 1024 * 1024  # 20 MB
+MAX_IMAGE_SIZE = 10 * 1024 * 1024  # 10 MB
 MAX_TOKENS = int(os.environ.get("DOUBAO_MAX_TOKENS", "1000"))
 
 VERSION = "0.2.0"
@@ -230,7 +230,7 @@ async def call_tool(name: str, arguments: Any) -> types.CallToolResult:
     }
 
     try:
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=180.0) as client:
             resp = await client.post(DOUBAO_ENDPOINT, headers=headers, json=payload)
             resp.raise_for_status()
             data = resp.json()
@@ -245,7 +245,7 @@ async def call_tool(name: str, arguments: Any) -> types.CallToolResult:
             "请检查 DOUBAO_API_KEY 是否有效，以及模型是否已开通。"
         )
     except httpx.TimeoutException:
-        return _error("API 请求超时（60s），请稍后重试或减小图片尺寸。")
+        return _error("API 请求超时（180s），请稍后重试或减小图片尺寸。")
     except Exception as exc:
         logger.exception("API 调用未知错误")
         return _error(f"调用 API 时发生未知错误: {exc}")
