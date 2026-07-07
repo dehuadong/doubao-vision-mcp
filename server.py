@@ -173,7 +173,6 @@ async def list_tools() -> list[types.Tool]:
                             "填写后会自动拼接到默认分析提示词末尾，"
                             "引导模型按「主要回应→详细观察→上下文与分析→补充说明」结构输出。"
                         ),
-                        ),
                     },
                 },
                 "required": ["image"],
