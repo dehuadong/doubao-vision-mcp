@@ -23,49 +23,26 @@
 
 ## 🚀 快速开始
 
-### 1️⃣ 安装 uv
+### 1️⃣ 克隆项目
 
 ```bash
-# macOS / Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# 或使用 Homebrew (macOS)
-brew install uv
-
-# Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-验证安装：
-```bash
-uv --version
-```
-
----
-
-### 2️⃣ 创建项目
-
-```bash
-mkdir doubao-vision-mcp
+git clone https://github.com/dehuadong/doubao-vision-mcp.git
 cd doubao-vision-mcp
 ```
 
----
+### 2️⃣ 安装依赖
 
-### 3️⃣ 创建项目文件
- 
-
----
-
-### 4️⃣ 安装依赖
+需要 Python 3.10+ 和 [uv](https://github.com/astral-sh/uv) 包管理器：
 
 ```bash
+# 安装 uv（如已安装可跳过）
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 安装项目依赖
 uv sync
 ```
 
----
-
-### 5️⃣ 设置环境变量
+### 3️⃣ 设置环境变量
 
 ```bash
 # 必须设置
@@ -74,21 +51,16 @@ export DOUBAO_API_KEY="你的火山引擎 API Key"
 # 可选（默认值如下）
 export DOUBAO_MODEL="doubao-seed-2.0-pro"
 export DOUBAO_ENDPOINT="https://ark.cn-beijing.volces.com/api/v3/chat/completions"
+export DOUBAO_MAX_TOKENS="1000"
 ```
 
----
-
-### 6️⃣ 测试运行
+### 4️⃣ 测试运行
 
 ```bash
-# 方式一： 
-python3 server.py 
-
-# 方式二： 
 uv run python server.py
 ```
 
-如果没有报错，说明服务启动正常（会等待 MCP 协议通信，按 `Ctrl+C` 退出）。
+正常启动后会等待 MCP 协议通信（无报错即可，按 `Ctrl+C` 退出）。
 
 ---
 
@@ -212,10 +184,11 @@ claude mcp add --transport stdio doubao-vision \
 
 ```
 doubao-vision-mcp/
-├── pyproject.toml          # uv 项目配置
-├── uv.lock                 # 依赖锁定文件（uv sync 自动生成）
-├── server.py               # 主服务代码
-└── README.md               # 本文档
+├── server.py                # 主服务代码
+├── pyproject.toml           # uv 项目配置
+├── README.md                # 本文档
+├── 提示词.md                 # 默认分析提示词
+└── .gitignore               # Git 忽略规则
 ```
 
 ---
