@@ -1,7 +1,7 @@
 [project]
 name = "doubao-vision-mcp"
-version = "0.1.1"
-description = "MCP server for Doubao Vision model (doubao-seed-2.0-pro)"
+version = "0.2.0"
+description = "MCP server for Doubao Vision model (doubao-seed-2.0-pro) — 豆包视觉模型 MCP 服务"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

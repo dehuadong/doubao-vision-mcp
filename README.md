@@ -1,6 +1,3 @@
-好的，我整理一份完整的、最终版的方案，包含所有文件和配置，开箱即用。
-
----
 
 # Doubao Vision MCP Server
 
@@ -97,9 +94,19 @@ uv run python server.py
 
 ## 🔧 配置 Claude Code
 
-在 Claude Code 的 MCP 配置文件（`~/.claude.json` 或项目根目录的 `.mcp.json`）中配置。
+在 Claude Code 中通过命令行添加，或在项目根目录的 `.mcp.json` 中配置。
 
-### 方式一：在配置中设置环境变量（推荐 ✅）
+### 方式一：使用 claude mcp add 命令（推荐 ✅）
+
+```bash
+claude mcp add --transport stdio doubao-vision \
+  --env DOUBAO_API_KEY="你的API密钥" \
+  -- uv --directory /完整路径/to/doubao-vision-mcp run python server.py
+```
+
+### 方式二：使用 .mcp.json 配置文件
+
+在项目根目录创建 `.mcp.json`：
 
 ```json
 {
@@ -122,7 +129,7 @@ uv run python server.py
 }
 ```
 
-### 方式二：使用系统环境变量
+### 方式三：使用系统环境变量
 
 如果已经通过 `export` 设置了环境变量，可以省略 `env` 字段：
 
@@ -154,16 +161,32 @@ uv run python server.py
 
 ### `recognize_image`
 
-识别图片内容。
+使用豆包视觉模型识别图片内容。支持本地文件和网络 URL。
 
 **参数**：
 
 | 参数 | 类型 | 必填 | 描述 |
 |------|------|------|------|
-| `image` | string | ✅ | 本地图片路径（绝对或相对路径）或网络 URL |
-| `prompt` | string | ❌ | 提问内容，默认为 "描述这张图片" |
+| `image` | string | ✅ | 本地图片绝对路径或网络 URL |
+| `prompt` | string | ❌ | 对图片的具体提问，会自动拼接到默认分析提示词末尾。不填则仅用默认分析框架进行通用识别 |
 
-**返回**：模型生成的文本描述
+**支持格式**：JPEG、PNG、GIF、WebP、BMP、TIFF、ICO、SVG
+
+**返回**：模型按「主要回应 → 详细观察 → 上下文与分析 → 补充说明」结构输出的文本描述
+
+**Prompt 拼接机制**：工具内置默认分析提示词（引导模型结构化输出），不会因为提供 `prompt` 参数而被丢弃。用户传入的 `prompt` 会自动拼接到默认提示词末尾：
+
+- 不传 `prompt` → 仅使用默认分析框架进行通用识别
+- 传 `prompt: "图中有什么动物"` → 默认分析框架 + `用户的具体要求：图中有什么动物`
+
+### 环境变量
+
+| 变量 | 必填 | 默认值 | 描述 |
+|------|------|------|------|
+| `DOUBAO_API_KEY` | ✅ | — | 火山引擎 API Key |
+| `DOUBAO_MODEL` | ❌ | `doubao-seed-2.0-pro` | 模型名称 |
+| `DOUBAO_ENDPOINT` | ❌ | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` | API 端点 |
+| `DOUBAO_MAX_TOKENS` | ❌ | `1000` | 最大输出 token 数 |
 
 ---
 
